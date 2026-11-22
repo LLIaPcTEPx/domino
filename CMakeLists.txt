@@ -7,9 +7,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} SHARED src/main.cpp)
 
-if (NOT DEFINED GEODE_SDK)
-    message(FATAL_ERROR "GEODE_SDK is not set. Install Geode CLI/SDK, or pass -DGEODE_SDK=<path>.")
+# Geode CLI exports GEODE_SDK as an environment variable. Copy it into the
+# CMake variable when it hasn't been passed explicitly with -DGEODE_SDK=... .
+if (NOT DEFINED GEODE_SDK OR GEODE_SDK STREQUAL "")
+    if (DEFINED ENV{GEODE_SDK} AND NOT "$ENV{GEODE_SDK}" STREQUAL "")
+        set(GEODE_SDK "$ENV{GEODE_SDK}")
+    else()
+        message(FATAL_ERROR
+            "Geode SDK path is missing. Install it with `geode sdk install`, "
+            "restart your terminal, or set GEODE_SDK to your SDK directory."
+        )
+    endif()
 endif()
 
-add_subdirectory(${GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
+if (NOT IS_DIRECTORY "${GEODE_SDK}")
+    message(FATAL_ERROR "GEODE_SDK does not point to a directory: ${GEODE_SDK}")
+endif()
+
+add_subdirectory("${GEODE_SDK}" "${CMAKE_CURRENT_BINARY_DIR}/geode")
 setup_geode_mod(${PROJECT_NAME})
