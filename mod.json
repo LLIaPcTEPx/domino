@@ -1,0 +1,15 @@
+{
+  "geode": "4.0.0",
+  "gd": {
+    "win": "2.2091",
+    "mac": "2.2091"
+  },
+  "id": "domino.random-console",
+  "name": "Random Console",
+  "version": "v1.0.0",
+  "developer": "domino",
+  "description": "An in-game command console with random level and official-level commands. F5 toggles the console.",
+  "links": {
+    "source": "https://github.com/LLIaPcTEPx/domino"
+  }
+}
